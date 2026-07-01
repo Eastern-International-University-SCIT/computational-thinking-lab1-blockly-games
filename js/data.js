@@ -440,14 +440,15 @@ function optionLabel(opt) {
   return (typeof opt === 'string') ? opt : (window.I18N ? window.I18N.t(opt.label) : opt.label.en);
 }
 
-// Total number of gradable blocks in a puzzle: one item block + one picture
-// block per item, plus one block per trait.
+// Total number of gradable units in a puzzle: one picture per item, one point
+// per answer-field drop-down, plus one block per trait.
 function puzzleTotalBlocks(puzzle) {
   let traits = 0;
   for (const item of puzzle.items) {
     traits += item.traits.length;
   }
-  return puzzle.items.length * 2 + traits;
+  const n = puzzle.items.length;
+  return n + n * puzzle.attributes.length + traits;
 }
 
 if (typeof window !== 'undefined') {
