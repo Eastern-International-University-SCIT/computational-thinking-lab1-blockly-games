@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Eight block-based matching puzzles of increasing difficulty.">
+  <title>Blockly Games 1</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="index">
+  <header class="hero">
+    <div id="langToggle" class="hero-lang"></div>
+    <h1>Blockly Games <span class="edit">1</span></h1>
+    <p id="tagline" class="tagline"></p>
+    <p id="progress" class="progress"></p>
+    <p id="grade" class="grade-line"></p>
+    <button id="clearButton" class="ghost" style="display:none">Clear progress</button>
+  </header>
+
+  <noscript>This page requires JavaScript to list the puzzles.</noscript>
+
+  <main id="grid" class="grid"></main>
+
+  <footer class="site-footer">
+    <p></p>
+    <p><a id="graderLink" href="grader.html">Teacher: auto-grade JSON &rarr;</a></p>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>

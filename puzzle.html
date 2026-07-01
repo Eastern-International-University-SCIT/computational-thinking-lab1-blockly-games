@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puzzle - Blockly Games 1</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Blockly is loaded from a CDN, so no local build step is needed. -->
+  <script src="https://unpkg.com/blockly@10.4.3/blockly.min.js"></script>
+</head>
+<body class="game">
+  <header class="bar">
+    <a class="back" href="index.html">&#8249; Blockly Games 1</a>
+    <div class="bar-title">
+      <h1 id="title">Puzzle</h1>
+      <p id="blurb"></p>
+    </div>
+    <div class="bar-actions">
+      <div id="langToggle"></div>
+      <button id="saveButton">Save answers</button>
+      <button id="checkButton" class="primary">Check answers</button>
+    </div>
+  </header>
+
+  <noscript>This game requires JavaScript and an internet connection (Blockly loads from a CDN).</noscript>
+
+  <div id="blockly"></div>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Identity overlay (Student ID + Full name before saving) -->
+  <div id="identityPanel" class="overlay">
+    <div class="overlay-card">
+      <h2 id="identityTitle">Enter your details</h2>
+      <div class="field">
+        <label id="studentIdLabel" for="studentId">Student ID</label>
+        <input id="studentId" type="text" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label id="studentNameLabel" for="studentName">Full name</label>
+        <input id="studentName" type="text" autocomplete="off" spellcheck="false">
+      </div>
+      <p id="identityError" class="identity-error" style="display:none"></p>
+      <div class="overlay-actions">
+        <button id="identityCancel">Cancel</button>
+        <button id="identityConfirm" class="primary">Save &amp; download</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result overlay -->
+  <div id="resultPanel" class="overlay">
+    <div class="overlay-card">
+      <button id="resultClose" class="overlay-close" aria-label="Close">&times;</button>
+      <h2 id="resultTitle">Result</h2>
+      <p id="resultMessage"></p>
+      <p id="resultScore" class="result-score"></p>
+      <div class="result-bar"><div id="resultBarValue" class="result-bar-value"></div></div>
+      <div id="resultActions" class="overlay-actions"></div>
+    </div>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/puzzle.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto-grader - Blockly Games 1</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="grader">
+  <header class="bar">
+    <a class="back" href="index.html">&#8249; Blockly Games 1</a>
+    <div class="bar-title"><h1 id="graderTitle">Auto-grader</h1></div>
+    <div class="bar-actions"><div id="langToggle"></div></div>
+  </header>
+
+  <noscript>This tool requires JavaScript.</noscript>
+
+  <main class="grader-main">
+    <p id="graderIntro" class="grader-intro"></p>
+
+    <label id="dropzone" class="dropzone" for="fileInput">
+      <span id="chooseLabel">Choose JSON files</span>
+      <input id="fileInput" type="file" accept="application/json,.json" multiple hidden>
+    </label>
+
+    <p id="noFiles" class="muted"></p>
+    <p id="studentInfo" class="student-info" style="display:none"></p>
+
+    <div id="report" class="report" style="display:none">
+      <table class="grade-table">
+        <thead>
+          <tr>
+            <th id="thPuzzle">Puzzle</th>
+            <th id="thTopic">Topic</th>
+            <th id="thBlocks">Blocks correct</th>
+            <th id="thScore">Puzzle score</th>
+            <th id="thWeight">Weight</th>
+          </tr>
+        </thead>
+        <tbody id="reportBody"></tbody>
+      </table>
+
+      <div class="grade-totals">
+        <div id="totalPercent" class="grade-total-main"></div>
+        <div id="total10" class="grade-total-sub"></div>
+      </div>
+
+      <button id="downloadButton" class="primary" disabled>Download report</button>
+    </div>
+  </main>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/grader.js"></script>
+</body>
+</html>
