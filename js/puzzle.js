@@ -242,38 +242,81 @@ function markDone() {
   }
 }
 
+/** Whether every answer-field drop-down on an item block is correct. */
+function itemAnswersCorrect(block) {
+  const item = currentPuzzle.items[block.itemIndex];
+  for (const attr of currentPuzzle.attributes) {
+    if (block.getFieldValue('ATTR_' + attr.key) !== item.attrs[attr.key]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Score every gradable unit: each answer-field drop-down, each picture,
+ * and each trait (item blocks themselves are not a separate unit).
+ */
+function scoreGradableUnits(blocks) {
+  let total = 0;
+  let correct = 0;
+  const badBlocks = [];
+
+  for (const block of blocks) {
+    if (block.type === 'item') {
+      const item = currentPuzzle.items[block.itemIndex];
+      for (const attr of currentPuzzle.attributes) {
+        total++;
+        if (block.getFieldValue('ATTR_' + attr.key) === item.attrs[attr.key]) {
+          correct++;
+        } else if (badBlocks.indexOf(block) === -1) {
+          badBlocks.push(block);
+        }
+      }
+    } else if (block.type === 'picture' || block.type === 'trait') {
+      total++;
+      if (block.isCorrect()) {
+        correct++;
+      } else {
+        badBlocks.push(block);
+      }
+    }
+  }
+
+  return {
+    total: total,
+    correct: correct,
+    errors: total - correct,
+    badBlocks: badBlocks,
+  };
+}
+
 /** Walk the workspace and build a language-independent answer record. */
 function buildAnswerRecord() {
   const blocks = workspace.getAllBlocks(false);
   const out = [];
-  let correct = 0;
+  const scored = scoreGradableUnits(blocks);
   for (const block of blocks) {
-    let ok = false;
     if (block.type === 'item') {
       const answers = {};
       for (const attr of currentPuzzle.attributes) {
         answers[attr.key] = block.getFieldValue('ATTR_' + attr.key);
       }
-      ok = block.isCorrect();
-      out.push({kind: 'item', item: block.itemIndex, answers: answers, correct: ok});
+      out.push({kind: 'item', item: block.itemIndex, answers: answers,
+                correct: itemAnswersCorrect(block)});
     } else if (block.type === 'picture') {
       const parent = block.getParent();
-      ok = block.isCorrect();
       out.push({kind: 'picture', item: block.itemIndex,
-                pluggedInto: parent ? parent.itemIndex : null, correct: ok});
+                pluggedInto: parent ? parent.itemIndex : null,
+                correct: block.isCorrect()});
     } else if (block.type === 'trait') {
       const parent = block.getSurroundParent();
-      ok = block.isCorrect();
       out.push({kind: 'trait', item: block.itemIndex, trait: block.traitIndex,
-                under: parent ? parent.itemIndex : null, correct: ok});
-    } else {
-      continue;
-    }
-    if (ok) {
-      correct++;
+                under: parent ? parent.itemIndex : null,
+                correct: block.isCorrect()});
     }
   }
-  return {blocks: out, correctBlocks: correct, totalBlocks: out.length};
+  return {blocks: out, correctBlocks: scored.correct, totalBlocks: scored.total};
 }
 
 /** Trigger a browser download of the given text content. */
@@ -376,17 +419,11 @@ function showToast(text) {
 /** Count and highlight mistakes; show the result panel. */
 function checkAnswers() {
   const blocks = workspace.getAllBlocks(false);
-  let errors = 0;
-  const badBlocks = [];
-  for (const block of blocks) {
-    if (typeof block.isCorrect === 'function' && !block.isCorrect()) {
-      errors++;
-      badBlocks.push(block);
-    }
-  }
-
-  const total = blocks.length;
-  const correct = total - errors;
+  const scored = scoreGradableUnits(blocks);
+  const total = scored.total;
+  const correct = scored.correct;
+  const errors = scored.errors;
+  const badBlocks = scored.badBlocks;
 
   if (errors === 0) {
     markDone();
