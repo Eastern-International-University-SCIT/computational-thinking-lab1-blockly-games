@@ -5,8 +5,10 @@
  * answer key in data.js.  The grade is split equally across the 8 puzzles, and
  * equally across the blocks within each puzzle:
  *
- *   puzzleScore = correctBlocks / totalBlocks      (0 .. 1)
- *   finalGrade  = average(puzzleScore over all 8)  (a missing file scores 0)
+ *   puzzleScore = correctUnits / totalUnits          (0 .. 1)
+ *   finalGrade  = average(puzzleScore over all 10)  (a missing file scores 0)
+ *
+ * A gradable unit is each answer-field drop-down, each picture, and each trait.
  */
 'use strict';
 
@@ -45,19 +47,13 @@
     let total = 0;
     let correct = 0;
 
-    // Items: every attribute must match the key.
+    // Answer fields: each drop-down is graded separately.
     for (let i = 0; i < nItems; i++) {
-      total++;
       const b = fileItems[i];
-      if (b && b.answers) {
-        let ok = true;
-        for (const attr of key.attributes) {
-          if (b.answers[attr.key] !== items[i].attrs[attr.key]) {
-            ok = false;
-            break;
-          }
-        }
-        if (ok) {
+      for (const attr of key.attributes) {
+        total++;
+        if (b && b.answers &&
+            b.answers[attr.key] === items[i].attrs[attr.key]) {
           correct++;
         }
       }
